@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Scalar.AspNetCore;
 using TravelAgency.Api.Filters;
+using TravelAgency.Application;
 using TravelAgency.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,10 @@ builder.Services.AddOpenApi();
 
 // Регистрируем слои
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
