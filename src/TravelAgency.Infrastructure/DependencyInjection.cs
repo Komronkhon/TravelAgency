@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TravelAgency.Application.Interfaces;
+using TravelAgency.Infrastructure.Authentication;
 using TravelAgency.Infrastructure.Persistence;
 using TravelAgency.Infrastructure.Repositories;
 
@@ -21,6 +22,8 @@ public static class DependencyInjection
 
         // Регистрируем репозитории
         services.AddScoped<ITourRepository, TourRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddSingleton<IJwtProvider, JwtProvider>();
 
         return services;
     }
