@@ -1,0 +1,43 @@
+[33mcommit 1890cbbda91b4b12a1d418361bd8bfe3671273c4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/redis-caching[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m
+Merge: 694084c 9a2a73c
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Tue Oct 27 11:15:32 2026 +0500
+
+    Merge branch 'feature/jwt-authorization' into develop
+
+[33mcommit 694084c2122e1bfd1d4fd2cd9a6073bf90f7fb2f[m
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Tue Oct 27 11:15:29 2026 +0500
+
+    Merge branch 'feature/jwt-authorization' into develop
+
+[33mcommit 9a2a73c87ef304353f0f4f26a6eadcef30e7c01f[m
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Tue Oct 27 11:00:58 2026 +0500
+
+    feat(auth): implement JWT authentication, refresh tokens and RBAC roles
+
+[33mcommit 76259e2e6c82796e2644b08637553d87f76828ca[m
+Merge: 2af057c 66e6fa5
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Tue Oct 27 10:14:21 2026 +0500
+
+    feat(tours): complete Clean Architecture layers and ToursController
+
+[33mcommit 66e6fa538b20abbe2d1cf7f1dd1ef04e93fdd08a[m
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Tue Oct 27 10:06:47 2026 +0500
+
+    feat(tours): implement Clean Architecture layers, Result pattern and Tours REST controller
+
+[33mcommit 6ff08f695ed23c7ed58e6ee9ca2d8638fc26a583[m
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Mon Oct 26 18:09:07 2026 +0500
+
+    test
+
+[33mcommit 2af057c2b35b21a93f16176a80fd22fbbb2339da[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: Komronkhon Shavkatzoda <komronkhonshavkatzoda@gmail.com>
+Date:   Mon Oct 26 10:43:57 2026 +0500
+
+    chore: initial repository commit

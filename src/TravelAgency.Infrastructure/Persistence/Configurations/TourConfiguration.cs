@@ -33,5 +33,9 @@ public sealed class TourConfiguration : IEntityTypeConfiguration<Tour>
 
         builder.Property(t => t.IsActive)
             .IsRequired();
+
+        // Включаем аппаратный rowversion в MS SQL Server для защиты от гонки потоков
+        builder.Property(t => t.RowVersion)
+            .IsRowVersion();
     }
 }

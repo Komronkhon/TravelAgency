@@ -8,6 +8,7 @@ public sealed class Tour : BaseEntity
     public string Destination { get; private set; }
     public decimal Price { get; private set; }
     public int AvailableSeats { get; private set; }
+    public byte[] RowVersion { get; private set; } = [];
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
     public bool IsActive { get; private set; }
