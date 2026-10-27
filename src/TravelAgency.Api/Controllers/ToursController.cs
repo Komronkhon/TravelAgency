@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelAgency.Application.Tours;
 using TravelAgency.Application.Tours.DTOs;
@@ -26,6 +27,7 @@ public sealed class ToursController(ITourApplicationService tourService) : ApiCo
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Agent")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreateTourRequest request, CancellationToken ct)

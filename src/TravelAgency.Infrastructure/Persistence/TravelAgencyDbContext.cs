@@ -6,6 +6,7 @@ namespace TravelAgency.Infrastructure.Persistence;
 public sealed class TravelAgencyDbContext(DbContextOptions<TravelAgencyDbContext> options) : DbContext(options)
 {
     public DbSet<Tour> Tours => Set<Tour>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
