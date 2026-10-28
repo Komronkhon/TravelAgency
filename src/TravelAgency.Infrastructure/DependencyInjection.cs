@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TravelAgency.Application.Bookings;
 using TravelAgency.Application.Interfaces;
 using TravelAgency.Infrastructure.Authentication;
 using TravelAgency.Infrastructure.Persistence;
@@ -24,6 +25,8 @@ public static class DependencyInjection
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddSingleton<IJwtProvider, JwtProvider>();
+        services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<IBookingApplicationService, BookingApplicationService>();
 
         return services;
     }
