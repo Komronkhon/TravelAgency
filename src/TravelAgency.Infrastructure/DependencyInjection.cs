@@ -4,8 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using TravelAgency.Application.Bookings;
 using TravelAgency.Application.Interfaces;
 using TravelAgency.Infrastructure.Authentication;
+using TravelAgency.Infrastructure.Documents;
 using TravelAgency.Infrastructure.Persistence;
 using TravelAgency.Infrastructure.Repositories;
+using TravelAgency.Infrastructure.Storage;
 
 namespace TravelAgency.Infrastructure;
 
@@ -27,6 +29,9 @@ public static class DependencyInjection
         services.AddSingleton<IJwtProvider, JwtProvider>();
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IBookingApplicationService, BookingApplicationService>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddSingleton<IFileStorageService, LocalObjectStorageService>();
+        services.AddSingleton<IVoucherPdfGenerator, QuestPdfVoucherGenerator>();
 
         return services;
     }

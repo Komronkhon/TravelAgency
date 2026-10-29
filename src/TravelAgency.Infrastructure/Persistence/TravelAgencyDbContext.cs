@@ -8,6 +8,7 @@ public sealed class TravelAgencyDbContext(DbContextOptions<TravelAgencyDbContext
     public DbSet<Tour> Tours => Set<Tour>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<StoredDocument> StoredDocuments => Set<StoredDocument>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
