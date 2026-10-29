@@ -33,6 +33,17 @@ public static class DependencyInjection
         services.AddSingleton<IFileStorageService, LocalObjectStorageService>();
         services.AddSingleton<IVoucherPdfGenerator, QuestPdfVoucherGenerator>();
 
+        // Подключаем распределённый кеш Redis
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379";
+            options.InstanceName = "TravelAgency:";
+        });
+
+        // Регистрируем реальный репозиторий и оборачиваем его в CachedTourRepository (Паттерн Декоратор)
+        services.AddScoped<TourRepository>();
+        services.AddScoped<ITourRepository, CachedTourRepository>();
+
         return services;
     }
 }
