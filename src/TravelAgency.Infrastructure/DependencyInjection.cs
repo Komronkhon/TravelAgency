@@ -4,8 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using TravelAgency.Application.Bookings;
 using TravelAgency.Application.Interfaces;
 using TravelAgency.Infrastructure.Authentication;
+using TravelAgency.Infrastructure.Documents;
 using TravelAgency.Infrastructure.Persistence;
 using TravelAgency.Infrastructure.Repositories;
+using TravelAgency.Infrastructure.Storage;
 
 namespace TravelAgency.Infrastructure;
 
@@ -27,6 +29,20 @@ public static class DependencyInjection
         services.AddSingleton<IJwtProvider, JwtProvider>();
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IBookingApplicationService, BookingApplicationService>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddSingleton<IFileStorageService, LocalObjectStorageService>();
+        services.AddSingleton<IVoucherPdfGenerator, QuestPdfVoucherGenerator>();
+
+        // Подключаем распределённый кеш Redis
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379";
+            options.InstanceName = "TravelAgency:";
+        });
+
+        // Регистрируем реальный репозиторий и оборачиваем его в CachedTourRepository (Паттерн Декоратор)
+        services.AddScoped<TourRepository>();
+        services.AddScoped<ITourRepository, CachedTourRepository>();
 
         return services;
     }
