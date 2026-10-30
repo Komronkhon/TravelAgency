@@ -13,7 +13,6 @@ public sealed class Booking : BaseEntity
     public BookingStatus Status { get; private set; }
     public DateTime CreatedAtUtc { get; private set; }
 
-    // Навигационное свойство для EF Core
     public Tour? Tour { get; private set; }
 
     private Booking() { }
@@ -46,7 +45,6 @@ public sealed class Booking : BaseEntity
         if (string.IsNullOrWhiteSpace(customerEmail) || !customerEmail.Contains('@'))
             return Result.Failure<Booking>(Error.Validation("Booking.InvalidEmail", "Указан некорректный Email туриста."));
 
-        // Пытаемся зарезервировать места в самом туре
         var reserveResult = tour.ReserveSeats(seatsCount);
         if (reserveResult.IsFailure)
         {

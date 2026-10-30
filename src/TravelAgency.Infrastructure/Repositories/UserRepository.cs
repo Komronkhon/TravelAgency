@@ -9,8 +9,7 @@ public sealed class UserRepository(TravelAgencyDbContext context) : IUserReposit
 {
     public async Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
     {
-        var normalized = email.ToLowerInvariant().Trim();
-        return await context.Users.FirstOrDefaultAsync(u => u.Email == normalized, ct);
+        return await context.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
     }
 
     public async Task<User?> GetByRefreshTokenAsync(string refreshToken, CancellationToken ct = default)

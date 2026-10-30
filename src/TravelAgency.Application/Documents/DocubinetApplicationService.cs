@@ -47,18 +47,15 @@ public sealed class DocubinetApplicationService(
                 Error.NotFound("Booking.NotFound", $"Бронь с ID '{bookingId}' не найдена."));
         }
 
-        // 1. Генерируем официальный PDF-ваучер в памяти через QuestPDF
         var pdfBytes = pdfGenerator.GenerateVoucherPdf(booking, booking.Tour);
         var sha256 = Convert.ToHexStringLower(SHA256.HashData(pdfBytes));
 
         var fileName = $"TourVoucher_{booking.Id.ToString()[..8].ToUpperInvariant()}.pdf";
         var storageKey = $"vouchers/{DateTime.UtcNow:yyyy/MM}/{Guid.NewGuid()}_{fileName}";
 
-        // 2. Потоково отправляем PDF в объектное хранилище
         using var memoryStream = new MemoryStream(pdfBytes);
         await fileStorage.UploadAsync(memoryStream, storageKey, "application/pdf", ct);
 
-        // 3. Сохраняем карточку документа с SHA-256 чексуммой в MS SQL Server (Docubinet)
         var document = new StoredDocument(
             booking.Id,
             fileName,
@@ -87,7 +84,6 @@ public sealed class DocubinetApplicationService(
             docCategory = DocumentCategory.PassportScan;
         }
 
-        // Вычисляем SHA-256 потоково и сбрасываем позицию потока в 0
         using var bufferStream = new MemoryStream();
         await fileStream.CopyToAsync(bufferStream, ct);
         bufferStream.Position = 0;

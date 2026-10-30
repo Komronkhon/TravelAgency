@@ -13,7 +13,6 @@ public sealed class Tour : BaseEntity
     public DateTime EndDate { get; private set; }
     public bool IsActive { get; private set; }
 
-    // Конструктор для EF Core
     private Tour() { }
 
     public Tour(string title, string destination, decimal price, int availableSeats, DateTime startDate, DateTime endDate)
@@ -39,32 +38,23 @@ public sealed class Tour : BaseEntity
         IsActive = true;
     }
 
-    // Бизнес-метод бронирования мест в туре
-    // Бизнес-метод бронирования мест в туре через Result Pattern
     public Result ReserveSeats(int count)
     {
         if (!IsActive)
-        {
             return Result.Failure(Error.Conflict("Tour.Inactive", "Этот тур закрыт для бронирования."));
-        }
 
         if (count <= 0)
-        {
             return Result.Failure(Error.Validation("Tour.InvalidSeatCount", "Количество бронируемых мест должно быть больше нуля."));
-        }
 
         if (AvailableSeats < count)
-        {
             return Result.Failure(Error.Conflict(
                 "Tour.NotEnoughSeats",
                 $"Недостаточно свободных мест. Запрошено: {count}, доступно: {AvailableSeats}."));
-        }
 
         AvailableSeats -= count;
         return Result.Success();
     }
 
-    // Метод отмены брони / возврата мест
     public void IncreaseSeats(int count)
     {
         if (count <= 0)

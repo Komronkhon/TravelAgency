@@ -11,7 +11,6 @@ public sealed class AuthController(IAuthApplicationService authService) : ApiCon
 {
     [HttpPost("register")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken ct)
     {
         var result = await authService.RegisterAsync(request, ct);
@@ -20,7 +19,6 @@ public sealed class AuthController(IAuthApplicationService authService) : ApiCon
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken ct)
     {
         var result = await authService.LoginAsync(request, ct);
@@ -29,7 +27,6 @@ public sealed class AuthController(IAuthApplicationService authService) : ApiCon
 
     [HttpPost("refresh")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request, CancellationToken ct)
     {
         var result = await authService.RefreshTokenAsync(request, ct);

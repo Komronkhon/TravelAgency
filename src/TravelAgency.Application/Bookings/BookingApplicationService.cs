@@ -37,31 +37,25 @@ public sealed class BookingApplicationService(
     public async Task<Result<BookingResponse>> CreateBookingAsync(CreateBookingRequest request, CancellationToken ct = default)
     {
         var tour = await tourRepository.GetByIdAsync(request.TourId, ct);
-        if (tour is null)
-        {
-            return Result.Failure<BookingResponse>(
-                Error.NotFound("Tour.NotFound", $"Тур с ID '{request.TourId}' не найден."));
-        }
 
-        // Создаем бронь и уменьшаем места в туре через доменный метод
+        if (tour is null)
+            return Result.Failure<BookingResponse>(Error.NotFound("Tour.NotFound", $"Тур с ID '{request.TourId}' не найден."));
+
         var bookingResult = Booking.Create(tour, request.CustomerName, request.CustomerEmail, request.SeatsCount);
+
         if (bookingResult.IsFailure)
-        {
             return Result.Failure<BookingResponse>(bookingResult.Error);
-        }
 
         var booking = bookingResult.Value;
 
         try
         {
-            // Оба изменения (UPDATE Tours и INSERT Bookings) сохраняются в ОДНОЙ транзакции!
             await bookingRepository.AddAsync(booking, ct);
             await bookingRepository.SaveChangesAsync(ct);
             metrics.RecordBookingCreated(tour.Title, booking.SeatsCount, booking.TotalPrice);
         }
         catch (Exception ex) when (ex.GetType().Name == "DbUpdateConcurrencyException")
         {
-            // Сработала защита RowVersion в MS SQL Server!
             return Result.Failure<BookingResponse>(
                 Error.Conflict(
                     "Booking.ConcurrencyConflict",
@@ -74,11 +68,9 @@ public sealed class BookingApplicationService(
     public async Task<Result<BookingResponse>> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
         var booking = await bookingRepository.GetByIdAsync(id, ct);
+
         if (booking is null)
-        {
-            return Result.Failure<BookingResponse>(
-                Error.NotFound("Booking.NotFound", $"Бронь с ID '{id}' не найдена."));
-        }
+            return Result.Failure<BookingResponse>(Error.NotFound("Booking.NotFound", $"Бронь с ID '{id}' не найдена."));
 
         return Result.Success(MapToResponse(booking, booking.Tour?.Title ?? string.Empty));
     }

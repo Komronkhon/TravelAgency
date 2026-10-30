@@ -13,9 +13,8 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.FullName).IsRequired().HasMaxLength(150);
         builder.Property(u => u.Email).IsRequired().HasMaxLength(150);
         builder.Property(u => u.PasswordHash).IsRequired();
-        builder.Property(u => u.Role).HasConversion<string>().HasMaxLength(30).IsRequired();
+        builder.Property(u => u.Role).HasConversion<string>().IsRequired().HasMaxLength(30);
 
-        // Уникальный индекс по Email в MS SQL Server
         builder.HasIndex(u => u.Email).IsUnique();
     }
 }

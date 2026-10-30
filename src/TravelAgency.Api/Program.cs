@@ -15,13 +15,11 @@ using TravelAgency.Application.Common.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Регистрируем Контроллеры + наш глобальный ActionFilter и настройки JSON
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ActionExecutionTimingFilter>();
 });
 
-// 2. Настраиваем Enterprise-версионирование API (например: /api/v1/diagnostics/status)
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -36,7 +34,6 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// 3. Настраиваем глобальный стандарт ошибок RFC 9457 (ProblemDetails)
 builder.Services.AddProblemDetails(options =>
 {
     options.CustomizeProblemDetails = ctx =>
@@ -47,7 +44,6 @@ builder.Services.AddProblemDetails(options =>
 
 builder.Services.AddOpenApi();
 
-// Регистрируем слои
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services
@@ -72,7 +68,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// === НАСТРОЙКА СТРУКТУРИРОВАННЫХ ЛОГОВ (SERILOG -> CONSOLE + GRAFANA LOKI) ===
 builder.Host.UseSerilog((context, loggerConfig) =>
 {
     loggerConfig
@@ -90,7 +85,6 @@ builder.Host.UseSerilog((context, loggerConfig) =>
             ]);
 });
 
-// === НАСТРОЙКА МЕТРИК И ТРЕЙСОВ (OPENTELEMETRY -> PROMETHEUS) ===
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource.AddService("TravelAgency.Api"))
     .WithMetrics(metrics =>
@@ -99,7 +93,7 @@ builder.Services.AddOpenTelemetry()
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
             .AddRuntimeInstrumentation()
-            .AddMeter(TravelAgencyMetrics.MeterName) // Наши бизнес-метрики туров и выручки!
+            .AddMeter(TravelAgencyMetrics.MeterName) 
             .AddPrometheusExporter();
     })
     .WithTracing(tracing =>
@@ -111,7 +105,6 @@ builder.Services.AddOpenTelemetry()
 
 var app = builder.Build();
 
-// === КОНВЕЙЕР MIDDLEWARE ===
 app.UseExceptionHandler();
 
 app.MapPrometheusScrapingEndpoint();
@@ -136,7 +129,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseSerilogRequestLogging();
-
-// Открывает эндпоинт /metrics, откуда Prometheus каждые 5 секунд забирает показатели
 
 app.Run();

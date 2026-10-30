@@ -14,7 +14,6 @@ public sealed class TravelAgencyDbContext(DbContextOptions<TravelAgencyDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Применяем все конфигурации из текущей сборки
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(TravelAgencyDbContext).Assembly);
     }
 }

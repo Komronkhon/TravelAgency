@@ -14,12 +14,10 @@ public sealed class ActionExecutionTimingFilter(
         var controllerName = context.Controller.GetType().Name;
         var actionName = context.ActionDescriptor.DisplayName;
 
-        // Выполняется ПОСЛЕ Model Binding, но ДО входа в метод контроллера
         logger.LogInformation("Starting controller action {Controller}.{Action}", controllerName, actionName);
 
         var resultContext = await next();
 
-        // Выполняется ПОСЛЕ выхода из метода контроллера
         stopwatch.Stop();
 
         context.HttpContext.Response.Headers["X-Action-Time-Ms"] = stopwatch.ElapsedMilliseconds.ToString();

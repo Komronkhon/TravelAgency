@@ -74,7 +74,6 @@ public sealed class TourApplicationService(ITourRepository tourRepository) : ITo
                 Error.NotFound("Tour.NotFound", $"Тур с ID '{tourId}' не найден."));
         }
 
-        // Вызываем богатую доменную логику внутри сущности Tour
         var reserveResult = tour.ReserveSeats(seatsCount);
         if (reserveResult.IsFailure)
         {

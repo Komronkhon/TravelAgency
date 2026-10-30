@@ -22,8 +22,6 @@ public sealed class CachedTourRepository(
 
     public async Task<Tour?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        // Для изменений (ReserveSeats) EF Core должен отслеживать сущность (ChangeTracker),
-        // поэтому чтение по ID берём напрямую из MS SQL Server с проверкой RowVersion
         return await innerRepository.GetByIdAsync(id, cancellationToken);
     }
 
@@ -90,7 +88,6 @@ public sealed class CachedTourRepository(
         }
     }
 
-    // Внутренняя модель сериализации для обхода приватных сеттеров Rich Domain Model
     private sealed record TourCacheModel(
         Guid Id,
         string Title,
@@ -100,8 +97,7 @@ public sealed class CachedTourRepository(
         DateTime StartDate,
         DateTime EndDate)
     {
-        public static TourCacheModel FromDomain(Tour t) =>
-            new(t.Id, t.Title, t.Destination, t.Price, t.AvailableSeats, t.StartDate, t.EndDate);
+        public static TourCacheModel FromDomain(Tour t) => new(t.Id, t.Title, t.Destination, t.Price, t.AvailableSeats, t.StartDate, t.EndDate);
 
         public Tour ToDomain()
         {
