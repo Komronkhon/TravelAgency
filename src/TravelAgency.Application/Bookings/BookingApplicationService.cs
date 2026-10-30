@@ -1,4 +1,5 @@
-﻿using TravelAgency.Application.Interfaces;
+﻿using TravelAgency.Application.Common.Diagnostics;
+using TravelAgency.Application.Interfaces;
 using TravelAgency.Domain.Common;
 using TravelAgency.Domain.Entities;
 
@@ -30,7 +31,8 @@ public interface IBookingApplicationService
 
 public sealed class BookingApplicationService(
     ITourRepository tourRepository,
-    IBookingRepository bookingRepository) : IBookingApplicationService
+    IBookingRepository bookingRepository,
+    TravelAgencyMetrics metrics) : IBookingApplicationService
 {
     public async Task<Result<BookingResponse>> CreateBookingAsync(CreateBookingRequest request, CancellationToken ct = default)
     {
@@ -55,6 +57,7 @@ public sealed class BookingApplicationService(
             // Оба изменения (UPDATE Tours и INSERT Bookings) сохраняются в ОДНОЙ транзакции!
             await bookingRepository.AddAsync(booking, ct);
             await bookingRepository.SaveChangesAsync(ct);
+            metrics.RecordBookingCreated(tour.Title, booking.SeatsCount, booking.TotalPrice);
         }
         catch (Exception ex) when (ex.GetType().Name == "DbUpdateConcurrencyException")
         {

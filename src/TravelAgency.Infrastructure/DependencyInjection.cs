@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TravelAgency.Application.Bookings;
+using TravelAgency.Application.Common.Diagnostics;
 using TravelAgency.Application.Interfaces;
 using TravelAgency.Infrastructure.Authentication;
 using TravelAgency.Infrastructure.Documents;
@@ -43,6 +44,7 @@ public static class DependencyInjection
         // Регистрируем реальный репозиторий и оборачиваем его в CachedTourRepository (Паттерн Декоратор)
         services.AddScoped<TourRepository>();
         services.AddScoped<ITourRepository, CachedTourRepository>();
+        services.AddSingleton<TravelAgencyMetrics>();
 
         return services;
     }
